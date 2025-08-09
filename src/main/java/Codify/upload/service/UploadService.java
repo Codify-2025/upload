@@ -5,17 +5,20 @@ import Codify.upload.repository.UploadRepository;
 import Codify.upload.web.dto.SubmissionDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly=true)
 public class UploadService {
 
     private final UploadRepository uploadRepository;
 
+    @Transactional
     public void saveUpload(SubmissionDto dto) {
-        Submission submission = Submission.builder()
+        final Submission submission = Submission.builder()
                 .assignmentId(dto.getAssignmentId())
                 .fileName(dto.getFileName())
                 .week(dto.getWeek())
