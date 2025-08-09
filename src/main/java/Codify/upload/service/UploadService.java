@@ -11,7 +11,6 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly=true)
 public class UploadService {
 
     private final UploadRepository uploadRepository;
