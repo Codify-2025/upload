@@ -1,5 +1,6 @@
 package Codify.upload.web.controller;
 
+import Codify.upload.exception.dev.DevPasswordUnauthorizedException;
 import Codify.upload.service.S3Service;
 import Codify.upload.web.dto.GetS3UrlDto;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class S3Controller {
             @RequestParam String filename) { // 임시 대체, Spring Security 적용 후 변경 필요
 
         if (!devPassword.equals(password)) {
-            return ResponseEntity.status(401).build();
+            throw new DevPasswordUnauthorizedException();
         }
         GetS3UrlDto getS3UrlDto = s3Service.getPostS3Url(userId, filename);
         return ResponseEntity.ok(getS3UrlDto);
