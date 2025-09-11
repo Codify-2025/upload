@@ -68,6 +68,7 @@ jobs:
         run: |
           sed -i "s|image: ${{ secrets.DEPLOY_USERNAME }}/codify-upload:.*|image: ${{ secrets.DEPLOY_USERNAME }}/codify-upload:${{ needs.build-and-push.outputs.image_tag }}|" deployment.yaml
       - name: 3. 변경된 매니페스트 커밋 및 푸시
+        id: commit_step
         run: |
           git config --global user.name 'dylee00'
           git config --global user.email 'dylee6820@gmail.com'
