@@ -29,5 +29,6 @@ public class S3Controller {
         final UUID userUuid = UUID.fromString(userUuidHeader);
         GetS3UrlDto getS3UrlDto = s3Service.getPostS3Url(userUuid,assignmentId,filename);
         return ResponseEntity.ok(getS3UrlDto);
+        //test
     }
 }
