@@ -74,18 +74,47 @@ jobs:
           git add .
           if git diff-index --quiet HEAD; then
             echo "No changes to commit."
-            echo "::set-output name=deployed::false"
+            echo "deployed=false" >> $GITHUB_OUTPUT
           else
             git commit -m "Deploy: Update upload image to ${{ needs.build-and-push.outputs.image_tag }}"
             git push
-            echo "::set-output name=deployed::true"
+            echo "deployed=true" >> $GITHUB_OUTPUT
           fi
       - name: 4. Discord Notification
         if: steps.commit_step.outputs.deployed == 'true'
-        run: | 
-          SERVICE_NAME="${{ github.event.repository.name }}"
-
-          curl -H "Content-Type: application/json" \
-             -X POST \
-             -d "{\"content\": \"${SERVICE_NAME} 배포 완료!\"}" \
-             ${{ secrets.DISCORD_WEBHOOK_URL }}
+        uses: Ilshidur/action-discord@0.3.2
+        env: 
+          DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+          DISCORD_USERNAME: DEPLOY_BOT
+          DISCORD_AVATAR: https://github.com/pknu-wap/WAPP/blob/main/image/icon.png?raw=true
+          DISCORD_EMBEDS: |  
+            [
+                  { 
+                    "title": "🚀 배포 완료!",
+                    "color": 65280,
+                    "description": "${{ github.event.repository.name }} 서비스가 성공적으로 배포되었습니다.",
+                    "fields": [
+                      {
+                        "name": "Repository",
+                        "value": "${{ github.event.repository.name }}",
+                        "inline": true
+                      },
+                      {
+                        "name": "Image Tag",
+                        "value": "${{ needs.build-and-push.outputs.image_tag }}",
+                        "inline": true
+                      },
+                      {
+                        "name": "Actor",
+                        "value": "${{ github.actor }}",
+                        "inline": true
+                      },
+                      {
+                        "name": "Commit",
+                        "value": "[${{ github.sha }}](${{ github.event.repository.html_url }}/commit/${{ github.sha }})",
+                        "inline": false
+                      }
+                    ],
+                    "timestamp": "${{ github.event.head_commit.timestamp }}"
+                  }
+                ]
