@@ -15,4 +15,5 @@ public class SubmissionDto {
     private Long studentId;
     private String studentName;
     private String s3Key;
+    private Boolean isLastFile;
 }

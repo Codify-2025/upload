@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 public class UploadService {
 
     private final UploadRepository uploadRepository;
+    private final ProcessingService processingService;
 
     @Transactional
     public void saveUpload(SubmissionDto dto) {
@@ -27,5 +28,16 @@ public class UploadService {
                 .build();
 
         uploadRepository.save(submission);
+
+        boolean isLastFile = dto.getIsLastFile();
+
+        //마지막 파일이 아니라면
+        if (!isLastFile) {
+            processingService.addFileUploadToGroup(submission.getAssignmentId(),submission.getStudentId());
+        } else {
+            //마지막 파일이라면
+            processingService.addLastFileToGroup(submission.getAssignmentId(), submission.getStudentId());
+        }
+
     }
 }
