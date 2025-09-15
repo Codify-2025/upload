@@ -1,16 +1,19 @@
 package Codify.upload.web.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
 @AllArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MessageDto {
+
+    private static final long serialVersionUID = 123L;
+
     private String messageType;
     private String groupId;
     private Long assignmentId;

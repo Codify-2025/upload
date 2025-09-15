@@ -33,10 +33,10 @@ public class UploadService {
 
         //마지막 파일이 아니라면
         if (!isLastFile) {
-            processingService.addFileUploadToGroup(submission.getAssignmentId(),submission.getStudentId());
+            processingService.addFileUploadToGroup(submission.getAssignmentId(),submission.getSubmissionId());
         } else {
             //마지막 파일이라면
-            processingService.addLastFileToGroup(submission.getAssignmentId(), submission.getStudentId());
+            processingService.addLastFileToGroup(submission.getAssignmentId(), submission.getSubmissionId());
         }
 
     }
