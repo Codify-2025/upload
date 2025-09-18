@@ -12,6 +12,8 @@ public enum ErrorCode {
     INVALID_DEV_PASSWORD(HttpStatus.UNAUTHORIZED, "E5", "유효하지 않은 개발용 비밀번호입니다."),
     ASSIGNMENT_ACCESS_DENIED(HttpStatus.NOT_FOUND, "E6", "해당 과제가 존재하지 않습니다."),
 
+    GROUP_IS_NOT_READY(HttpStatus.BAD_REQUEST, "R1", "아직 processing 상태 입니다."),
+
     ARTICLE_NOT_FOUND(HttpStatus.NOT_FOUND, "A1", "존재하지 않는 아티클입니다.");
 
     private final HttpStatus status; //http 상태 코드

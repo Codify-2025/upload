@@ -1,6 +1,5 @@
 package Codify.upload.web.controller;
 
-import Codify.upload.exception.dev.DevPasswordUnauthorizedException;
 import Codify.upload.service.S3Service;
 import Codify.upload.web.dto.GetS3UrlDto;
 import lombok.RequiredArgsConstructor;
