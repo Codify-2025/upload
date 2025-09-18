@@ -49,6 +49,9 @@ dependencies {
 
     //mongodb
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+
+    //prometheus
+    implementation 'io.micrometer:micrometer-registry-prometheus'
 }
 
 dependencyManagement {
