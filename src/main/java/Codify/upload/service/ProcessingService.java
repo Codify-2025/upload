@@ -77,7 +77,13 @@ public class ProcessingService {
 
         //message를 RabbitMQ에 push
         rabbitTemplate.convertAndSend("codifyExchange", "file.upload", message);
-        log.info("message를 RabbitMQ에 push {}", message.getSubmissionIds());
+        log.info("parsing queue에 push완료");
+        log.info("message를 RabbitMQ에 push submissionIds: {}", message.getSubmissionIds());
+        log.info("message를 RabbitMQ에 push assignmentId: {}", message.getAssignmentId());
+        log.info("message를 RabbitMQ에 push groupId: {}", message.getGroupId());
+        log.info("message를 RabbitMQ에 push messageType: {}", message.getMessageType());
+        log.info("message를 RabbitMQ에 push totalFiles: {}", message.getTotalFiles());
+
 
         // 처리된 그룹 삭제
         processingRepository.deleteById(group.getId());
