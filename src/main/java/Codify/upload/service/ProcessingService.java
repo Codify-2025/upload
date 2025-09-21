@@ -5,6 +5,7 @@ import Codify.upload.exception.GroupIsNotReadyException;
 import Codify.upload.repository.ProcessingRepository;
 import Codify.upload.web.dto.MessageDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ import java.util.Optional;
 import static Codify.upload.domain.ProcessingGroup.GroupStatus.PROCESSING;
 
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProcessingService {
@@ -44,6 +46,7 @@ public class ProcessingService {
 
         //db에 저장
         processingRepository.save(group);
+        log.info("파일 업로드 후 mongodb에 저장 {}", group.getSubmissionIds());
     }
 
     //마지막 파일
@@ -66,15 +69,19 @@ public class ProcessingService {
 
     private void processGroup(ProcessingGroup group) {
         processingRepository.save(group);
+        log.info("파일 업로드 모두 완료 후 mongodb에 저장 {}", group.getSubmissionIds());
 
         //group 객체로 메시지 생성
         MessageDto message = toProcessingMessage(group);
+        log.info("group객체로 메시지 생성 {}", message.getSubmissionIds());
 
         //message를 RabbitMQ에 push
         rabbitTemplate.convertAndSend("codifyExchange", "file.upload", message);
+        log.info("message를 RabbitMQ에 push {}", message.getSubmissionIds());
 
         // 처리된 그룹 삭제
         processingRepository.deleteById(group.getId());
+        log.info("처리된 그룹 삭제 완료");
     }
 
     //group 정보를 메시지로 변환
