@@ -53,7 +53,7 @@ public class ProcessingService {
     //마지막 파일
     //group의 status를 COMPLETED로 변경 후 디비에 저장
     @Transactional
-    public void addLastFileToGroup(Long assignmentId, Long submissionId) {
+    public String addLastFileToGroup(Long assignmentId, Long submissionId) {
         addFileUploadToGroup(assignmentId, submissionId);
 
         Optional<ProcessingGroup> lastUploadGroup = processingRepository.findGroupByAssignmentId(assignmentId);
@@ -68,6 +68,7 @@ public class ProcessingService {
 
                 //group 객체로 메시지 생성
                 MessageDto message = toProcessingMessage(group);
+                String groupId = message.getGroupId();
 
                 //커밋 후 메시지 전송
                 TransactionSynchronizationManager.registerSynchronization(
@@ -85,9 +86,10 @@ public class ProcessingService {
                         }
                 );
 
-
+                return groupId;
             }
         }
+        return null;
     }
 
 

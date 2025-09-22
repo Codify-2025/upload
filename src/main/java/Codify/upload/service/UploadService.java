@@ -16,7 +16,7 @@ public class UploadService {
     private final ProcessingService processingService;
 
     @Transactional
-    public void saveUpload(SubmissionDto dto) {
+    public String saveUpload(SubmissionDto dto) {
         final Submission submission = Submission.builder()
                 .assignmentId(dto.getAssignmentId())
                 .fileName(dto.getFileName())
@@ -34,10 +34,10 @@ public class UploadService {
         //마지막 파일이 아니라면
         if (!isLastFile) {
             processingService.addFileUploadToGroup(submission.getAssignmentId(),submission.getSubmissionId());
+            return null; // 마지막 파일이 아니면 groupId 없음
         } else {
             //마지막 파일이라면
-            processingService.addLastFileToGroup(submission.getAssignmentId(), submission.getSubmissionId());
+            return processingService.addLastFileToGroup(submission.getAssignmentId(), submission.getSubmissionId());
         }
-
     }
 }

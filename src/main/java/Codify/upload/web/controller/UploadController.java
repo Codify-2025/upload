@@ -17,8 +17,8 @@ public class UploadController {
     private final UploadService uploadService;
 
     @PostMapping
-    public ResponseEntity<Void> save(@RequestBody SubmissionDto submissiondto) {
-        uploadService.saveUpload(submissiondto);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> save(@RequestBody SubmissionDto submissiondto) {
+        String groupId = uploadService.saveUpload(submissiondto);
+        return ResponseEntity.ok(groupId);
     }
 }
