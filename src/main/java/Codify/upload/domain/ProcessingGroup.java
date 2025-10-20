@@ -21,6 +21,10 @@ public class ProcessingGroup {
 
     private List<Long> submissionIds = new ArrayList<>();
 
+    private List<Long> studentIds = new ArrayList<>();
+
+    private List<String> s3Keys = new ArrayList<>();
+
     @Indexed
     private GroupStatus status;
 
@@ -31,12 +35,14 @@ public class ProcessingGroup {
         COMPLETED
     }
 
-    public static ProcessingGroup createGroup(Long assignmentId, Long firstSubmissionId) {
+    public static ProcessingGroup createGroup(Long assignmentId, Long firstSubmissionId,Long studentId, String s3Key) {
 
         ProcessingGroup group = new ProcessingGroup();
 
         group.assignmentId = assignmentId;
         group.submissionIds.add(firstSubmissionId);
+        group.studentIds.add(studentId);
+        group.s3Keys.add(s3Key);
         group.status = GroupStatus.PROCESSING;
         group.createdAt = LocalDateTime.now();
 

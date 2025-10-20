@@ -29,7 +29,7 @@ public class ProcessingService {
 
     //첫 번째 ~ 마지막 이전
     @Transactional
-    public void addFileUploadToGroup(Long assignmentId, Long submissionId) {
+    public void addFileUploadToGroup(Long assignmentId, Long submissionId,Long studentId, String s3Key) {
         // 기존 그룹 찾기 또는 새 그룹 생성
         Optional<ProcessingGroup> existingGroup = processingRepository.findGroupByAssignmentId(assignmentId);
 
@@ -41,9 +41,11 @@ public class ProcessingService {
             //submissionId 중복체크
             if (!group.getSubmissionIds().contains(submissionId)) {
                 group.getSubmissionIds().add(submissionId);
+                group.getStudentIds().add(studentId);
+                group.getS3Keys().add(s3Key);
             }
         } else {
-            group = ProcessingGroup.createGroup(assignmentId, submissionId);
+            group = ProcessingGroup.createGroup(assignmentId, submissionId,studentId, s3Key);
         }
 
         //db에 저장
@@ -53,8 +55,8 @@ public class ProcessingService {
     //마지막 파일
     //group의 status를 COMPLETED로 변경 후 디비에 저장
     @Transactional
-    public void addLastFileToGroup(Long assignmentId, Long submissionId) {
-        addFileUploadToGroup(assignmentId, submissionId);
+    public void addLastFileToGroup(Long assignmentId, Long submissionId,Long studentId, String s3Key) {
+        addFileUploadToGroup(assignmentId, submissionId,studentId,s3Key);
 
         Optional<ProcessingGroup> lastUploadGroup = processingRepository.findGroupByAssignmentId(assignmentId);
 
@@ -106,6 +108,8 @@ public class ProcessingService {
                 batchGroupId,
                 group.getAssignmentId(),
                 new ArrayList<>(group.getSubmissionIds()), // 복사본 반환
+                new ArrayList<>(group.getStudentIds()),
+                new ArrayList<>(group.getS3Keys()),
                 group.getSubmissionIds().size(),
                 LocalDateTime.now()
         );

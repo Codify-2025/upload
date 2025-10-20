@@ -18,6 +18,8 @@ public class MessageDto {
     private String groupId;
     private Long assignmentId;
     private List<Long> submissionIds;
+    private List<Long> studentIds;
+    private List<String> s3Keys;
     private Integer totalFiles;
     private LocalDateTime timestamp;
 
